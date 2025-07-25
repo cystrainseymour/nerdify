@@ -114,28 +114,34 @@ class Translator{
 		
 		for(let pattern of this.patterns){
 			let translation = new Word(this.dict[pattern.getLemma()].getLemma(), pattern.getLex(), pattern.getAffixes());
-			text = text.replace(pattern.getForm(), translation.getForm());
+			
+			let reg_add = "(\\b|$)";
+			
+			let reg = new RegExp(pattern.getForm() + reg_add, "g");
+			text = text.replace(reg, translation.getForm());
 			
 			// replace, when the first letter is capitalized
 			let upperP = pattern.getForm();
 			let firstP = upperP.charAt(0).toUpperCase();
 			upperP = firstP + upperP.slice(1);
+			reg = new RegExp(upperP + reg_add, "g");
 			
 			
 			let upperW = translation.getForm();
 			let firstW = upperW.charAt(0).toUpperCase();
 			upperW = firstW + upperW.slice(1);
 			
-			text = text.replace(upperP, upperW);
+			text = text.replace(reg, upperW);
 			
 			// replace, when the whole word is capitalized
 			upperP = upperP.toUpperCase();
 			upperW = upperW.toUpperCase();
+			reg = new RegExp(upperP + reg_add, "g");
 			
-			text = text.replace(upperP, upperW);
+			text = text.replace(reg, upperW);
 			
 			// replace ignoring case (translation will be lower case)
-			let reg = new RegExp(upperP, "ig");
+			reg = new RegExp(upperP + reg_add, "ig");
 			text = text.replace(reg, upperW.toLowerCase());
 		}
 		
@@ -255,6 +261,9 @@ function setUpAffixes(){
 	affixes.push(new Affix("s", [1], (word) => {
 			return [1].includes(word.getLex());
 		}	,(form) => {
+			if(form.includes("person")){
+				return form.replace("person", "people");
+			}
 			if(form.endsWith("h") || form.endsWith("s")){
 				form += "e";
 			}
@@ -353,7 +362,7 @@ function setUpAffixes(){
 }
 
 function setup(){
-	// 0 - adjective, 1 - noun, 2 - verb, 3 - phrase/adverb, 4 - phrasal verb
+	// 0 - adjective, 1 - noun, 2 - verb, 3 - phrase/adverb, 4 - phrasal verb, 5 - uninflected
 	
 	const to_dict = {};
 	to_dict["unrelated"] = new Word("orthogonal", 0);
@@ -363,7 +372,7 @@ function setup(){
 	to_dict["alike"] = new Word("isomorphic", 0);
 	to_dict["considerable"] = new Word("nontrivial", 0);
 	to_dict["unimportant"] = new Word("trivial", 0);
-	to_dict["very few"]= new Word("a negligible number of", 3);
+	to_dict["very few"]= new Word("a negligible number of", 5);
 	to_dict["there be"] = new Word("there exist", 2);
 	to_dict["there be not"] = new Word("there do not exist", 2);
 	to_dict["there are"] = new Word("there exist", 2);
@@ -375,19 +384,27 @@ function setup(){
 	to_dict["a little bit"] = new Word("by epsilon", 3);
 	to_dict["mental energy"] = new Word("signal-to-noise ratio", 1);
 	to_dict["size"] = new Word("magnitude", 1);
-	to_dict["enough"] = new Word("a critical mass of", 3);
+	to_dict["enough"] = new Word("a critical mass of", 5);
 	to_dict["split up"] = new Word("parallelize", 4);
 	to_dict["crossover"] = new Word("intersection", 1);
 	to_dict["overlap"] = new Word("intersect", 2);
-	to_dict["yes"] = new Word("this is a true statement", 3);
+	to_dict["yes"] = new Word("this is a true statement", 5);
+	to_dict["no"] = new Word("negative", 5);
 	to_dict["effect"] = new Word("corollary", 1);
 	to_dict["interact"] = new Word("interface", 2);
-	to_dict["in other words"] = new Word("equivalently", 3);
-	to_dict["everyone"] = new Word("for every x such that x is a person", 3);
+	to_dict["in other words"] = new Word("equivalently", 5);
+	to_dict["everyone"] = new Word("for every x such that x is a person", 5);
 	to_dict["fast"] = new Word("efficient", 0);
 	to_dict["eventually"] = new Word("asymptotically", 3);
 	to_dict["eventual"] = new Word("asymptotic", 3);
-	to_dict["only so many"] = new Word("only up to n", 3);
+	to_dict["only so many"] = new Word("only up to n", 5);
+	to_dict["hello"] = new Word("greetings", 5);
+	to_dict["nerd"] = new Word("normal, respectable person", 1);
+	to_dict["trend"] = new Word("trendline", 1);
+	to_dict["association"] = new Word("correlation", 1);
+	to_dict["associate"] = new Word("correlate", 0);
+	to_dict["when"] = new Word("under which conditions", 0);
+	to_dict["what is"] = new Word("find x such that x is", 0);
 	
 	let affixes = setUpAffixes();
 	
