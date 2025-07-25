@@ -1,2 +1,3 @@
 # nerdify
-Translate normal speech to nerd speech
+Communicate with nerds
+Press shift + enter to do a line return
