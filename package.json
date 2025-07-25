@@ -1,0 +1,21 @@
+{
+  "name": "nerdify",
+  "version": "1.0.0",
+  "description": "translate to nerd talk",
+  "main": "nerdify.js",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cystrainseymour/nerdify.git"
+  },
+  "author": "Cy Strain-Seymour",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cystrainseymour/nerdify/issues"
+  },
+  "homepage": "https://github.com/cystrainseymour/nerdify#readme"
+}
