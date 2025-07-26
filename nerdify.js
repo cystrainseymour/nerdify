@@ -274,11 +274,11 @@ function setUpAffixes(){
 	
 	// it - only matters for phrasal verbs e.g. "split (it) up"
 	affixes.push(new Affix("it", [4], (word) => {
-			return [4].includes(word.getLex()) && word.getForm().split().length > 1;
+			return [4].includes(word.getLex());
 		}	,(form) => {
 			let words = form.split(" ");
 			if(words.length == 1){
-				return form;
+				return form + " it";
 			}
 			words[0] += " it";
 			form = words.join(" ");
@@ -288,11 +288,11 @@ function setUpAffixes(){
 	
 	// them - only matters for phrasal verbs e.g. "split (them) up"
 	affixes.push(new Affix("them", [4], (word) => {
-			return [4].includes(word.getLex()) && word.getForm().split().length > 1 && !(word.getAffixes().includes(affixes[5]));
-		}	,(form) => {
+			return [4].includes(word.getLex()) && !(word.getAffixes().includes(affixes[5]));
+		},	(form) => {
 			let words = form.split(" ");
 			if(words.length == 1){
-				return form;
+				return form + " them";
 			}
 			words[0] += " them";
 			form = words.join(" ");
@@ -402,9 +402,13 @@ function setup(){
 	to_dict["nerd"] = new Word("normal, respectable person", 1);
 	to_dict["trend"] = new Word("trendline", 1);
 	to_dict["association"] = new Word("correlation", 1);
-	to_dict["associate"] = new Word("correlate", 0);
-	to_dict["when"] = new Word("under which conditions", 0);
-	to_dict["what is"] = new Word("find x such that x is", 0);
+	to_dict["associate"] = new Word("correlate", 2);
+	to_dict["when"] = new Word("under which conditions", 5);
+	to_dict["what is"] = new Word("find x such that x is", 5);
+	to_dict["what's"] = new Word("find x such that x is", 5);
+	to_dict["good chance"] = new Word("nontrivial possibility", 1);
+	to_dict["translate"] = new Word("encode", 2);
+	to_dict["think"] = new Word("process", 2);
 	
 	let affixes = setUpAffixes();
 	
